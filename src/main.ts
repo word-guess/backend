@@ -40,6 +40,6 @@ async function bootstrap() {
     salt: process.env.COOKIE_SALT as string,
   })
 
-  await app.listen(3000, process.env.NEST_ADDRESS || ``)
+  await app.listen(8000, process.env.NEST_ADDRESS || ``)
 }
 bootstrap()
