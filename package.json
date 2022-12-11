@@ -19,7 +19,8 @@
     "orm:migration:run": "yarn build && typeorm migration:run -d ./.config/typeorm-data-source.js",
     "orm:migration:revert": "yarn build && typeorm migration:revert -d ./.config/typeorm-data-source.js",
     "ci:lint:eslint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
-    "ci:lint:prettier": "prettier --list-different \"src/**/*.ts\""
+    "ci:lint:prettier": "prettier --list-different \"src/**/*.ts\"",
+    "ci:orm:migration:run": "typeorm migration:run -d ./.config/typeorm-data-source.js"
   },
   "dependencies": {
     "@fastify/cookie": "^8.3.0",
