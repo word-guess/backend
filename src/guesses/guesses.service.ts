@@ -13,7 +13,7 @@ import { Repository } from 'typeorm'
 import { HttpService } from '@nestjs/axios'
 import { lastValueFrom } from 'rxjs'
 import { Word } from 'words/entities/word.entity'
-// import { Cron, CronExpression } from '@nestjs/schedule'
+import { Cron, CronExpression } from '@nestjs/schedule'
 import { User } from 'users/entities/user.entity'
 
 enum SessionKey {
@@ -121,9 +121,9 @@ export class GuessesService {
     })
   }
 
-  // @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async deleteAll() {
     await this.userGuessesRepository.clear()
-    await this.guessesRepository.delete({})
+    await this.guessesRepository.query(`TRUNCATE TABLE user_guess CASCADE`)
   }
 }
