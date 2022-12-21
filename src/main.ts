@@ -15,7 +15,7 @@ async function bootstrap() {
     new FastifyAdapter({ logger: true }),
   )
 
-  app.enableCors()
+  app.enableCors({ credentials: true })
 
   const config = new DocumentBuilder()
     .setVersion(process.env.VERSION as string)
