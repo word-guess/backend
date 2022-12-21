@@ -84,7 +84,9 @@ export class GuessesService {
 
       const { data } = await lastValueFrom(
         this.httpService.get<Pick<Guess, `similarity` | `rank`>>(
-          `${process.env.WORD_GUESS_ENDPOINT as string}/${word.text}/${text}`,
+          `${process.env.WORDS_SIMILARITY_ENDPOINT as string}/${
+            word.text
+          }/${text}`,
         ),
       )
 
