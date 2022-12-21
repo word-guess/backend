@@ -16,7 +16,7 @@ import { ScheduleModule } from '@nestjs/schedule'
       password: process.env.POSTGRES_PASSWORD,
       autoLoadEntities: true,
       synchronize: false,
-      logging: true,
+      logging: false,
     }),
     GuessesModule,
   ],
