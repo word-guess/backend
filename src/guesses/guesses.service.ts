@@ -58,7 +58,7 @@ export class GuessesService {
       const expirationDate = new Date()
       expirationDate.setUTCDate(expirationDate.getUTCDate() + 1)
       expirationDate.setUTCHours(0, 0, 0, 0)
-      session.options({ expires: expirationDate })
+      session.options({ expires: expirationDate, sameSite: `none` })
 
       session.set(SessionKey.UserId, user.id)
     }
