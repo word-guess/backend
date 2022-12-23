@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Session } from '@nestjs/common'
 import { GuessesService } from './guesses.service'
 import { CreateGuessDto } from './dto/create-guess.dto'
 import { Session as SecureSession } from '@fastify/secure-session'
+import { ApiTags } from '@nestjs/swagger'
 
+@ApiTags(`guesses`)
 @Controller('guesses')
 export class GuessesController {
   constructor(private readonly guessesService: GuessesService) {}

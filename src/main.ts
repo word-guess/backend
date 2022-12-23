@@ -15,8 +15,6 @@ async function bootstrap() {
     new FastifyAdapter({ logger: true }),
   )
 
-  console.log(process.env.CORS_ORIGINS?.split(`,`))
-
   app.enableCors({
     credentials: true,
     origin: process.env.CORS_ORIGINS?.split(`,`) || [],

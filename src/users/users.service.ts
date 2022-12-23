@@ -14,6 +14,13 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { id: userId } })
   }
 
+  async count() {
+    return (
+      (await this.usersRepository.findOne({ where: {}, order: { id: `desc` } }))
+        ?.id || 0
+    )
+  }
+
   create() {
     return this.usersRepository.save({})
   }
