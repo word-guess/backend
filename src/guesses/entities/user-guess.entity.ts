@@ -7,7 +7,7 @@ export class UserGuess {
   @PrimaryColumn()
   userId: number
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { cascade: true })
   @JoinColumn({ name: `userId` })
   user: User
 
