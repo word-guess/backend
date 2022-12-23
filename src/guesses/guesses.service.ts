@@ -127,9 +127,9 @@ export class GuessesService {
     })
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  @Cron(CronExpression.EVERY_5_SECONDS)
   async deleteAll() {
     await this.userGuessesRepository.clear()
-    await this.guessesRepository.query(`TRUNCATE TABLE user_guess CASCADE`)
+    await this.guessesRepository.query(`TRUNCATE TABLE guess CASCADE`)
   }
 }
