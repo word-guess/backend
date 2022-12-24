@@ -2,6 +2,11 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { User } from 'users/entities/user.entity'
 import { Repository } from 'typeorm'
+import { Session } from '@fastify/secure-session'
+
+enum SessionKey {
+  UserId = `userId`,
+}
 
 @Injectable()
 export class UsersService {
@@ -14,11 +19,30 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { id: userId } })
   }
 
-  async count() {
-    return (
-      (await this.usersRepository.findOne({ where: {}, order: { id: `desc` } }))
-        ?.id || 0
-    )
+  async getUser(session: Session) {
+    let user: User | null = null
+
+    const userId = session.get(SessionKey.UserId)
+    if (userId) {
+      user = await this.findOne(userId)
+    }
+
+    if (!user) {
+      user = await this.create()
+
+      const expirationDate = new Date()
+      expirationDate.setUTCDate(expirationDate.getUTCDate() + 1)
+      expirationDate.setUTCHours(0, 0, 0, 0)
+      session.options({
+        expires: expirationDate,
+        sameSite: `none`,
+        secure: true,
+      })
+
+      session.set(SessionKey.UserId, user.id)
+    }
+
+    return user
   }
 
   create() {

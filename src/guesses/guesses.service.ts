@@ -14,11 +14,6 @@ import { HttpService } from '@nestjs/axios'
 import { lastValueFrom } from 'rxjs'
 import { Word } from 'words/entities/word.entity'
 import { Cron, CronExpression } from '@nestjs/schedule'
-import { User } from 'users/entities/user.entity'
-
-enum SessionKey {
-  UserId = `userId`,
-}
 
 @Injectable()
 export class GuessesService {
@@ -42,32 +37,6 @@ export class GuessesService {
     return `${new Date().getUTCFullYear()}-${
       new Date().getUTCMonth() + 1
     }-${new Date().getUTCDate()}`
-  }
-
-  async getUser(session: Session) {
-    let user: User | null = null
-
-    const userId = session.get(SessionKey.UserId)
-    if (userId) {
-      user = await this.usersService.findOne(userId)
-    }
-
-    if (!user) {
-      user = await this.usersService.create()
-
-      const expirationDate = new Date()
-      expirationDate.setUTCDate(expirationDate.getUTCDate() + 1)
-      expirationDate.setUTCHours(0, 0, 0, 0)
-      session.options({
-        expires: expirationDate,
-        sameSite: `none`,
-        secure: true,
-      })
-
-      session.set(SessionKey.UserId, user.id)
-    }
-
-    return user
   }
 
   async getGuess({ text }: CreateGuessDto) {
@@ -105,7 +74,7 @@ export class GuessesService {
   }
 
   async create(session: Session, createGuessDto: CreateGuessDto) {
-    const user = await this.getUser(session)
+    const user = await this.usersService.getUser(session)
     const guess = await this.getGuess(createGuessDto)
 
     await this.userGuessesRepository.save({
@@ -117,7 +86,7 @@ export class GuessesService {
   }
 
   async findAll(session: Session) {
-    const user = await this.getUser(session)
+    const user = await this.usersService.getUser(session)
     return this.guessesRepository.find({
       where: { userGuesses: { userId: user.id } },
       relations: { userGuesses: true },
